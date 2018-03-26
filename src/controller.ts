@@ -1,17 +1,17 @@
 import { Product } from "product";
+import Store from "store";
 import View from "view";
 
 import "../assets/items.json";
 
 export default class Controller {
-	// store: Store;
-	view: View;
-	productsList: Product[];
-	filteredList: Product[];
+	private store: Store;
+	private view: View;
+	private productsList: Product[];
+	private filteredList: Product[];
 
-	// TODO: add store to params
-	constructor(view: View) {
-		// this.store = store;
+	constructor(store: Store, view: View) {
+		this.store = store;
 		this.view = view;
 		this.productsList = [];
 		this.filteredList = [];
@@ -19,27 +19,47 @@ export default class Controller {
 		this.view.bindSearchFilter(this.filterProducts.bind(this));
 	}
 
-	updateList = (items: Product[] = this.productsList) => {
-		this.view.showItems(this.sortProducts(items));
-		this.view.bindToggleItem(this.toggleSelecion.bind(this));
-	}
-
-	// init list
-	setView = (): any => {
+	initList = (): any => {
 		this.getProductList()
 			.then((data: Product[]) => {
 				this.productsList = data;
-				this.updateList();
+				this.store.load((storedData: Product[]) => {
+					this.loadSelection(storedData);
+					this.updateList();
+				});
 			});
+	}
+
+	loadSelection = (storedList: Product[]) => {
+		this.productsList.forEach((pr) => {
+			storedList.forEach((st) => {
+				if (st.id === pr.id) {
+					pr.selected = st.selected;
+				}
+			});
+		});
+
+	}
+
+	updateList = (items: Product[] = this.productsList) => {
+		this.view.showItems(this.sortProducts(items));
+		this.view.bindToggleItem(this.toggleSelecion.bind(this));
 	}
 
 	toggleSelecion = (event: Event): any => {
 		const input = event.target as HTMLInputElement;
 		const prodId = input.dataset.id;
 		const prod = this.productsList.find((p) => prodId === p.id.toString());
-		if (!prod) { return; }
+
+		if (!prod || !prodId) { return; }
 		prod.selected = input.checked;
-		this.updateList();
+
+		if (input.checked) {
+			this.store.insert(prod, this.updateList);
+		} else {
+			this.store.remove(prodId, this.updateList);
+		}
+
 	}
 
 	sortProducts = (items: Product[] = this.productsList): any => {

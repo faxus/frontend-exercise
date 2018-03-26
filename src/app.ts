@@ -1,4 +1,5 @@
 import Controller from "controller";
+import Store from "store";
 import Template from "template";
 import View from "view";
 
@@ -6,10 +7,10 @@ import "./app.scss";
 
 window.onload = () => {
 
-	// const store = new Store("todos-vanilla-es6");
+	const store = new Store("selected-products");
 	const template = new Template();
 	const view = new View(template);
-	const controller = new Controller(view); // send store to controller
+	const controller = new Controller(store, view);
 
-	controller.setView();
+	controller.initList();
 };

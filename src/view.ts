@@ -2,9 +2,9 @@ import { Product } from "product";
 import Template from "template";
 
 export default class View {
-	template: Template;
-	$productList: Element;
-	$filterResult: Element;
+	private template: Template;
+	private $productList: Element;
+	private $filterResult: Element;
 
 	constructor(template: Template) {
 		this.template = template;
