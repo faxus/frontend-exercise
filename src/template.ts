@@ -1,4 +1,4 @@
-import { Product } from "product";
+import { Product } from "model";
 
 export default class Template {
 	itemList(items: Product[]): string[] {

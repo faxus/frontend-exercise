@@ -1,4 +1,4 @@
-import { Product } from "product";
+import { Product } from "model";
 import Store from "store";
 import View from "view";
 

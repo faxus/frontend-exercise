@@ -1,4 +1,4 @@
-import { Product } from "product";
+import { Product } from "model";
 
 export default class Store {
 	private getSessionStorage: () => Product[];

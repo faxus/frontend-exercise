@@ -1,4 +1,4 @@
-import { Product } from "product";
+import { Product } from "model";
 import Template from "template";
 
 export default class View {
